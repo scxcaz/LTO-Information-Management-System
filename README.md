@@ -1,44 +1,111 @@
 # CMSC 127 LTO Information Management System
 
-## 📌 Project Overview
+## Project Overview
 
-This project is a simplified **Land Transportation Office (LTO) Information Management System**.
+This project is a simplified **Land Transportation Office (LTO) Information Management System** for managing driver, vehicle, vehicle registration, and traffic violation records.
 
 It allows LTO personnel to:
 
-* Manage drivers, vehicles, registrations, and violations
-* Store and update records
-* Generate SQL-based reports
+- View, add, edit, delete, and search driver records
+- View, add, edit, delete, and search vehicle records
+- View, add, edit, delete, and search vehicle registration records
+- View, add, edit, delete, and search traffic violation records
+- Generate required SQL-based reports from the MariaDB database
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
-* **Frontend + Backend:** Next.js (React)
-* **Database:** MariaDB
-* **Language:** JavaScript
+- **Frontend:** Next.js / React
+- **Backend:** Next.js API Routes
+- **Database:** MariaDB
+- **Language:** JavaScript
+- **Styling:** Tailwind CSS
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
-```
+```txt
 cmsc-127-st1-2l-casmamper-final-project/
-├── database/              # SQL file (schema + data + reports)
-├── src/
-│   ├── app/               # Next.js pages + API routes
-│   │   └── api/
-│   │       └── test-db/   # Test API route for DB connection
-│   ├── lib/
-│   │   └── db.js          # MariaDB connection pool
-├── .env.example           # Environment variables template
-├── README.md
-├── package.json
++-- database/
+�   +-- schema.sql                              # database schema and table definitions
+�   +-- seed.sql                                # sample seed data
+�   +-- reports.sql                             # standalone report query references
+�   +-- castillo_guarte_maminta_perez_PM3.sql   # archived combined SQL file
++-- src/
+�   +-- app/
+�   �   +-- api/                                # API routes
+�   �   �   +-- drivers/
+�   �   �   +-- vehicles/
+�   �   �   +-- registrations/
+�   �   �   +-- violations/
+�   �   �   +-- reports/
+�   �   +-- drivers/                            # driver records page
+�   �   +-- vehicles/                           # vehicle records page
+�   �   +-- registrations/                      # vehicle registration records page
+�   �   +-- violations/                         # traffic violation records page
+�   �   +-- reports/                            # reports page
+�   +-- lib/
+�       +-- db.js                               # MariaDB connection pool
++-- .env.example
++-- README.md
++-- package.json
 ```
 
 ---
 
-## ⚙️ Local Setup
+## Features
+
+### Driver Management
+
+- View driver records
+- Add new drivers
+- Edit existing drivers
+- Delete drivers when allowed by database constraints
+- Search driver records
+- Validate required driver fields
+
+### Vehicle Management
+
+- View vehicle records with owner details
+- Add new vehicles
+- Edit existing vehicles
+- Delete vehicles when allowed by database constraints
+- Search vehicle records
+- Validate required vehicle fields
+
+### Vehicle Registration Management
+
+- View vehicle registration records
+- Add new registration records
+- Edit existing registration records
+- Delete registration records
+- Search registration records
+
+### Traffic Violation Management
+
+- View traffic violation records
+- Add new violation records
+- Edit existing violation records
+- Delete violation records
+- Search violation records
+
+### Reports
+
+The system supports the required SQL-based reports:
+
+1. Registered drivers filtered by license type, license status, sex, and age range
+2. Vehicles owned by a given driver
+3. Vehicles with expired registrations as of a given date
+4. Drivers with expired or suspended licenses
+5. Traffic violations committed by a given driver within a date range
+6. Total number of violations per violation type for a given year
+7. Vehicles involved in violations within a given city or region
+
+---
+
+## Local Setup
 
 ### 1. Install dependencies
 
@@ -48,59 +115,99 @@ npm install
 
 ---
 
-### 2. Install MariaDB
+### 2. Install and start MariaDB
 
 Download and install MariaDB:
+
+```txt
 https://mariadb.org/download/
+```
 
 During installation:
 
-* Set a **root password**
-* Use default port: `3306`
+- Set a root password
+- Use the default port: `3306`
+
+Make sure MariaDB is running before starting the app.
 
 ---
 
-### 3. Import the database
+### 3. Set up the database
 
-Open MariaDB:
+The current setup uses the separated database files:
 
-```bash
-mysql -u root -p
+```txt
+database/schema.sql
+database/seed.sql
+database/reports.sql
 ```
 
-Then run:
+The old combined SQL file is kept only as an archived reference:
 
-```sql
-SOURCE C:/path/to/project/database/castillo_guarte_maminta_perez_PM3.sql;
+```txt
+database/castillo_guarte_maminta_perez_PM3.sql
 ```
 
-Example:
+Do not run the combined file together with the separated files to avoid duplicate setup.
 
-```sql
-SOURCE C:/Users/YourName/Desktop/cmsc-127-st1-2l-casmamper-final-project/database/castillo_guarte_maminta_perez_PM3.sql;
+#### PowerShell setup
+
+Drop the existing database if needed:
+
+```powershell
+mariadb -u root -pYourPassword -e "DROP DATABASE IF EXISTS LTOIMS;"
 ```
 
-Then verify:
+Import the schema:
 
-```sql
-USE LTOIMS;
-SHOW TABLES;
+```powershell
+Get-Content database/schema.sql | mariadb -u root -pYourPassword
+```
+
+Import the seed data:
+
+```powershell
+Get-Content database/seed.sql | mariadb -u root -pYourPassword
+```
+
+Verify the record counts:
+
+```powershell
+mariadb -u root -pYourPassword -e "USE LTOIMS; SELECT 'driver' AS table_name, COUNT(*) AS total FROM driver UNION ALL SELECT 'vehicle', COUNT(*) FROM vehicle UNION ALL SELECT 'vehicle_registration', COUNT(*) FROM vehicle_registration UNION ALL SELECT 'traffic_violation', COUNT(*) FROM traffic_violation;"
+```
+
+Expected result:
+
+```txt
+driver                50
+vehicle               50
+vehicle_registration  50
+traffic_violation     50
 ```
 
 ---
 
-### 4. Create your environment file
+### 4. Create the environment file
 
-Copy `.env.example`:
+Copy `.env.example` into `.env.local`:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Then edit:
+For Windows PowerShell, you can use:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+Then update `.env.local` with your local MariaDB credentials:
 
 ```env
+DB_HOST=localhost
+DB_USER=root
 DB_PASSWORD=your_mariadb_password
+DB_NAME=LTOIMS
 ```
 
 ---
@@ -111,60 +218,59 @@ DB_PASSWORD=your_mariadb_password
 npm run dev
 ```
 
----
-
-### 6. Test database connection
-
 Open:
 
+```txt
+http://localhost:3000
 ```
-http://localhost:3000/api/test-db
+
+Main pages:
+
+```txt
+http://localhost:3000/drivers
+http://localhost:3000/vehicles
+http://localhost:3000/registrations
+http://localhost:3000/violations
+http://localhost:3000/reports
 ```
 
-If successful, you should see driver data.
+---
+
+## Demo Preparation
+
+Before presenting, prepare a clean local database:
+
+```powershell
+mariadb -u root -pYourPassword -e "DROP DATABASE IF EXISTS LTOIMS;"
+Get-Content database/schema.sql | mariadb -u root -pYourPassword
+Get-Content database/seed.sql | mariadb -u root -pYourPassword
+npm run dev
+```
+
+Then test these pages:
+
+```txt
+/drivers
+/vehicles
+/registrations
+/violations
+/reports
+```
 
 ---
 
-## ⚠️ Important Notes
+## Important Notes
 
-* Do **NOT** commit `.env.local`
-* Each developer should use their own MariaDB password
-* Make sure MariaDB is running before starting the app
-
----
-
-## 🚧 Current Status
-
-* [x] Database design (ERD, RM)
-* [x] SQL file (schema + data + reports)
-* [x] Next.js project initialized
-* [x] Database connection established
-* [ ] API routes for each module
-* [ ] Frontend pages
-* [ ] Final integration
+- Do not commit `.env.local`
+- Each developer should use their own MariaDB password
+- `schema.sql` and `seed.sql` are the official setup files
+- `reports.sql` is for report query reference/testing
+- `castillo_guarte_maminta_perez_PM3.sql` is archived for reference only
 
 ---
 
-## 👥 Team Members
+## Team Members
 
-* Castillo, Sean Carlo
-* Maminta, Lawrence Andrew
-* Perez, Desmond Rainier
-
----
-
-## 🎯 Notes for Developers
-
-This repository already includes:
-
-* Database connection setup
-* A working test API route (`/api/test-db`)
-
-You can start working on:
-
-* API routes (`/api/drivers`, `/api/vehicles`, etc.)
-* Frontend pages inside `src/app`
-
-Refer to the test route as a guide for database queries.
-
----
+- Castillo, Sean Carlo
+- Maminta, Lawrence Andrew
+- Perez, Desmond Rainier
