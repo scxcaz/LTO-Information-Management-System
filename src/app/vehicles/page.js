@@ -41,7 +41,7 @@ export default function VehiclesPage() {
 
   const filteredVehicles = vehicles.filter((vehicle) => {
     const query = searchQuery.toLowerCase();
-    return Object.values(vehicle).some((val) => 
+    return Object.values(vehicle).some((val) =>
       val !== null && val !== undefined && String(val).toLowerCase().includes(query)
     );
   });

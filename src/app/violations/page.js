@@ -45,7 +45,7 @@ export default function ViolationsPage() {
 
   const filteredViolations = violations.filter((v) => {
     const query = searchQuery.toLowerCase();
-    return Object.values(v).some((val) => 
+    return Object.values(v).some((val) =>
       val !== null && val !== undefined && String(val).toLowerCase().includes(query)
     );
   });
@@ -72,7 +72,7 @@ export default function ViolationsPage() {
 
   function openEditModal(violation) {
     setEditViolation(violation);
-    
+
     // Safely parse date back to YYYY-MM-DD input field format
     let rawDate = "";
     if (violation.violationdate) {

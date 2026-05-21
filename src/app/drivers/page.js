@@ -43,7 +43,7 @@ export default function DriversPage() {
 
   const filteredDrivers = drivers.filter((driver) => {
     const query = searchQuery.toLowerCase();
-    return Object.values(driver).some((val) => 
+    return Object.values(driver).some((val) =>
       val !== null && val !== undefined && String(val).toLowerCase().includes(query)
     );
   });

@@ -41,7 +41,7 @@ export default function RegistrationsPage() {
 
   const filteredRegistrations = registrations.filter((reg) => {
     const query = searchQuery.toLowerCase();
-    return Object.values(reg).some((val) => 
+    return Object.values(reg).some((val) =>
       val !== null && val !== undefined && String(val).toLowerCase().includes(query)
     );
   });
@@ -64,7 +64,7 @@ export default function RegistrationsPage() {
 
   function openEditModal(registration) {
     setEditRegistration(registration);
-    
+
     let rawRegDate = "";
     if (registration.registrationdate) {
       const d = new Date(registration.registrationdate);
