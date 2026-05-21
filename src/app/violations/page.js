@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function ViolationsPage() {
   const [violations, setViolations] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -41,6 +42,13 @@ export default function ViolationsPage() {
   useEffect(() => {
     fetchViolations();
   }, []);
+
+  const filteredViolations = violations.filter((v) => {
+    const query = searchQuery.toLowerCase();
+    return Object.values(v).some((val) => 
+      val !== null && val !== undefined && String(val).toLowerCase().includes(query)
+    );
+  });
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -155,9 +163,18 @@ export default function ViolationsPage() {
     <main className="p-6">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Traffic Violations</h1>
-        <button onClick={openAddModal} className="btn-primary">
-          + Add Violation
-        </button>
+        <div className="flex gap-4">
+          <input
+            type="text"
+            placeholder="Search violations..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="form-field w-64"
+          />
+          <button onClick={openAddModal} className="btn-primary">
+            + Add Violation
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-lg border">
@@ -180,7 +197,7 @@ export default function ViolationsPage() {
           </thead>
 
           <tbody>
-            {violations.map((violation) => (
+            {filteredViolations.map((violation) => (
               <tr key={violation.violationno}>
                 <td className="border p-2">{violation.violationno}</td>
                 <td className="border p-2">{violation.violationtype}</td>
@@ -196,7 +213,6 @@ export default function ViolationsPage() {
                 </td>
                 <td className="border p-2">{violation.plateno}</td>
                 <td className="border p-2">
-                  {/* Flexbox wrapper to guarantee buttons stay horizontally aligned */}
                   <div className="flex items-center gap-2 whitespace-nowrap">
                     <button
                       onClick={() => openEditModal(violation)}
@@ -214,6 +230,13 @@ export default function ViolationsPage() {
                 </td>
               </tr>
             ))}
+            {filteredViolations.length === 0 && (
+              <tr>
+                <td colSpan="12" className="border p-4 text-center text-gray-500">
+                  No violations found matching your search.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

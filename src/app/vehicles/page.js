@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function VehiclesPage() {
   const [vehicles, setVehicles] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -37,6 +38,13 @@ export default function VehiclesPage() {
       setLoading(false);
     }
   }
+
+  const filteredVehicles = vehicles.filter((vehicle) => {
+    const query = searchQuery.toLowerCase();
+    return Object.values(vehicle).some((val) => 
+      val !== null && val !== undefined && String(val).toLowerCase().includes(query)
+    );
+  });
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -119,9 +127,18 @@ export default function VehiclesPage() {
     <main className="p-6">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Vehicles</h1>
-        <button onClick={openAddModal} className="btn-primary">
-          + Add Vehicle
-        </button>
+        <div className="flex gap-4">
+          <input
+            type="text"
+            placeholder="Search vehicles..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="form-field w-64"
+          />
+          <button onClick={openAddModal} className="btn-primary">
+            + Add Vehicle
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-lg border">
@@ -141,7 +158,7 @@ export default function VehiclesPage() {
             </tr>
           </thead>
           <tbody>
-            {vehicles.map((vehicle) => (
+            {filteredVehicles.map((vehicle) => (
               <tr key={vehicle.chassisno}>
                 <td className="border p-2">{vehicle.plateno}</td>
                 <td className="border p-2">{vehicle.chassisno}</td>
@@ -168,6 +185,13 @@ export default function VehiclesPage() {
                 </td>
               </tr>
             ))}
+            {filteredVehicles.length === 0 && (
+              <tr>
+                <td colSpan="10" className="border p-4 text-center text-gray-500">
+                  No vehicles found matching your search.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

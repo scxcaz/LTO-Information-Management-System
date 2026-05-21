@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function RegistrationsPage() {
   const [registrations, setRegistrations] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -37,6 +38,13 @@ export default function RegistrationsPage() {
   useEffect(() => {
     fetchRegistrations();
   }, []);
+
+  const filteredRegistrations = registrations.filter((reg) => {
+    const query = searchQuery.toLowerCase();
+    return Object.values(reg).some((val) => 
+      val !== null && val !== undefined && String(val).toLowerCase().includes(query)
+    );
+  });
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -144,9 +152,18 @@ export default function RegistrationsPage() {
     <main className="p-6">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Vehicle Registrations</h1>
-        <button onClick={openAddModal} className="btn-primary">
-          + Add Registration
-        </button>
+        <div className="flex gap-4">
+          <input
+            type="text"
+            placeholder="Search registrations..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="form-field w-64"
+          />
+          <button onClick={openAddModal} className="btn-primary">
+            + Add Registration
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-lg border">
@@ -166,7 +183,7 @@ export default function RegistrationsPage() {
           </thead>
 
           <tbody>
-            {registrations.map((registration) => (
+            {filteredRegistrations.map((registration) => (
               <tr key={registration.registrationno}>
                 <td className="border p-2">{registration.registrationno}</td>
                 <td className="border p-2">
@@ -202,6 +219,13 @@ export default function RegistrationsPage() {
                 </td>
               </tr>
             ))}
+            {filteredRegistrations.length === 0 && (
+              <tr>
+                <td colSpan="9" className="border p-4 text-center text-gray-500">
+                  No registrations found matching your search.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function DriversPage() {
   const [drivers, setDrivers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -39,6 +40,13 @@ export default function DriversPage() {
       setLoading(false);
     }
   }
+
+  const filteredDrivers = drivers.filter((driver) => {
+    const query = searchQuery.toLowerCase();
+    return Object.values(driver).some((val) => 
+      val !== null && val !== undefined && String(val).toLowerCase().includes(query)
+    );
+  });
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -122,9 +130,18 @@ export default function DriversPage() {
     <main className="p-6">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Drivers</h1>
-        <button onClick={openAddModal} className="btn-primary">
-          + Add Driver
-        </button>
+        <div className="flex gap-4">
+          <input
+            type="text"
+            placeholder="Search drivers..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="form-field w-64"
+          />
+          <button onClick={openAddModal} className="btn-primary">
+            + Add Driver
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-lg border">
@@ -144,7 +161,7 @@ export default function DriversPage() {
             </tr>
           </thead>
           <tbody>
-            {drivers.map((driver) => (
+            {filteredDrivers.map((driver) => (
               <tr key={driver.driverno}>
                 <td className="border p-2">{driver.driverno}</td>
                 <td className="border p-2">{driver.licno}</td>
@@ -171,6 +188,13 @@ export default function DriversPage() {
                 </td>
               </tr>
             ))}
+            {filteredDrivers.length === 0 && (
+              <tr>
+                <td colSpan="10" className="border p-4 text-center text-gray-500">
+                  No drivers found matching your search.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
