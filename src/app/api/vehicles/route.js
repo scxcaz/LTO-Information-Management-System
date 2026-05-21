@@ -75,8 +75,11 @@ export async function POST(request) {
     if (!plateno || String(plateno).trim() === "") {
       return Response.json({ success: false, message: "Plate Number is required." }, { status: 400 });
     }
-    if (!myear || isNaN(parseInt(myear))) {
-      return Response.json({ success: false, message: "Model Year must be a valid number." }, { status: 400 });
+    if (!myear || isNaN(Date.parse(myear))) {
+      return Response.json(
+        { success: false, message: "Model Year must be a valid date." },
+        { status: 400 }
+      );
     }
     if (!vehicletype || String(vehicletype).trim() === "") {
       return Response.json({ success: false, message: "Vehicle Type is required." }, { status: 400 });
@@ -113,7 +116,7 @@ export async function POST(request) {
         String(engineno).trim(),
         String(plateno).trim(),
         color ? String(color).trim() : null,
-        parseInt(myear),
+        myear,
         String(vehicletype).trim(),
         model ? String(model).trim() : null,
         make ? String(make).trim() : null,
@@ -159,8 +162,11 @@ export async function PUT(request) {
     if (!plateno || String(plateno).trim() === "") {
       return Response.json({ success: false, message: "Plate Number is required." }, { status: 400 });
     }
-    if (!myear || isNaN(parseInt(myear))) {
-      return Response.json({ success: false, message: "Model Year must be a valid number." }, { status: 400 });
+    if (!myear || isNaN(Date.parse(myear))) {
+      return Response.json(
+        { success: false, message: "Model Year must be a valid date." },
+        { status: 400 }
+      );
     }
     if (!vehicletype || String(vehicletype).trim() === "") {
       return Response.json({ success: false, message: "Vehicle Type is required." }, { status: 400 });
@@ -191,7 +197,7 @@ export async function PUT(request) {
         String(engineno).trim(),
         String(plateno).trim(),
         color ? String(color).trim() : null,
-        parseInt(myear),
+        myear,
         String(vehicletype).trim(),
         model ? String(model).trim() : null,
         make ? String(make).trim() : null,

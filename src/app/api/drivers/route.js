@@ -78,17 +78,40 @@ export async function POST(request) {
     if (!lname || String(lname).trim() === "") {
       return Response.json({ success: false, message: "Last Name is required." }, { status: 400 });
     }
-    if (!sex || !["M", "F"].includes(String(sex).toUpperCase().trim())) {
-      return Response.json({ success: false, message: "Sex must be 'M' or 'F'." }, { status: 400 });
+    if (!sex || !["Male", "Female"].includes(String(sex).trim())) {
+      return Response.json(
+        { success: false, message: "Sex must be Male or Female." },
+        { status: 400 }
+      );
     }
     if (!birthdate || isNaN(Date.parse(birthdate))) {
       return Response.json({ success: false, message: "Birthdate must be a valid date." }, { status: 400 });
     }
-    if (!lictype || !["Professional", "Non-Professional"].includes(String(lictype).trim())) {
-      return Response.json({ success: false, message: "License Type must be Professional or Non-Professional." }, { status: 400 });
+    if (
+      !lictype ||
+      !["Student Permit", "Non-Professional", "Professional"].includes(
+        String(lictype).trim()
+      )
+    ) {
+      return Response.json(
+        {
+          success: false,
+          message:
+            "License Type must be Student Permit, Non-Professional, or Professional.",
+        },
+        { status: 400 }
+      );
     }
-    if (!licstatus || !["Active", "Expired", "Suspended", "Revoked"].includes(String(licstatus).trim())) {
-      return Response.json({ success: false, message: "Invalid License Status." }, { status: 400 });
+    if (
+      !licstatus ||
+      !["valid", "expired", "suspended", "revoked"].includes(
+        String(licstatus).trim()
+      )
+    ) {
+      return Response.json(
+        { success: false, message: "Invalid License Status." },
+        { status: 400 }
+      );
     }
     if (!licexpiration || isNaN(Date.parse(licexpiration))) {
       return Response.json({ success: false, message: "License Expiration must be a valid date." }, { status: 400 });
@@ -115,7 +138,7 @@ export async function POST(request) {
         String(fname).trim(),
         mname ? String(mname).trim() : null,
         String(lname).trim(),
-        String(sex).toUpperCase().trim(),
+        String(sex).trim(),
         birthdate,
         address ? String(address).trim() : null,
         String(lictype).trim(),
@@ -167,17 +190,40 @@ export async function PUT(request) {
     if (!lname || String(lname).trim() === "") {
       return Response.json({ success: false, message: "Last Name is required." }, { status: 400 });
     }
-    if (!sex || !["M", "F"].includes(String(sex).toUpperCase().trim())) {
-      return Response.json({ success: false, message: "Sex must be 'M' or 'F'." }, { status: 400 });
+    if (!sex || !["Male", "Female"].includes(String(sex).trim())) {
+      return Response.json(
+        { success: false, message: "Sex must be Male or Female." },
+        { status: 400 }
+      );
     }
     if (!birthdate || isNaN(Date.parse(birthdate))) {
       return Response.json({ success: false, message: "Birthdate must be a valid date." }, { status: 400 });
     }
-    if (!lictype || !["Professional", "Non-Professional"].includes(String(lictype).trim())) {
-      return Response.json({ success: false, message: "License Type must be Professional or Non-Professional." }, { status: 400 });
+    if (
+      !lictype ||
+      !["Student Permit", "Non-Professional", "Professional"].includes(
+        String(lictype).trim()
+      )
+    ) {
+      return Response.json(
+        {
+          success: false,
+          message:
+            "License Type must be Student Permit, Non-Professional, or Professional.",
+        },
+        { status: 400 }
+      );
     }
-    if (!licstatus || !["Active", "Expired", "Suspended", "Revoked"].includes(String(licstatus).trim())) {
-      return Response.json({ success: false, message: "Invalid License Status." }, { status: 400 });
+    if (
+      !licstatus ||
+      !["valid", "expired", "suspended", "revoked"].includes(
+        String(licstatus).trim()
+      )
+    ) {
+      return Response.json(
+        { success: false, message: "Invalid License Status." },
+        { status: 400 }
+      );
     }
     if (!licexpiration || isNaN(Date.parse(licexpiration))) {
       return Response.json({ success: false, message: "License Expiration must be a valid date." }, { status: 400 });
@@ -197,7 +243,7 @@ export async function PUT(request) {
         String(fname).trim(),
         mname ? String(mname).trim() : null,
         String(lname).trim(),
-        String(sex).toUpperCase().trim(),
+        String(sex).trim(),
         birthdate,
         address ? String(address).trim() : null,
         String(lictype).trim(),
