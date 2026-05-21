@@ -1,5 +1,8 @@
 -- THIS IS THE COMBINED FILE OF SCHEMA, SEED, AND REPORTS (OUR MILESTONE 3) FOR REFERENCE
 
+-- archived combined database file
+-- for current setup, use schema.sql and seed.sql instead
+-- reports.sql contains the standalone report query references
 
 -- SCHEMA
 
