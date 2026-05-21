@@ -52,7 +52,6 @@ export async function POST(request) {
 
   try {
     conn = await pool.getConnection();
-
     const body = await request.json();
 
     const {
@@ -67,10 +66,62 @@ export async function POST(request) {
       driverno,
     } = body;
 
+    if (!chassisno || String(chassisno).trim() === "") {
+      return Response.json({ success: false, message: "Chassis Number is required." }, { status: 400 });
+    }
+    if (!engineno || String(engineno).trim() === "") {
+      return Response.json({ success: false, message: "Engine Number is required." }, { status: 400 });
+    }
+    if (!plateno || String(plateno).trim() === "") {
+      return Response.json({ success: false, message: "Plate Number is required." }, { status: 400 });
+    }
+    if (!myear || isNaN(Date.parse(myear))) {
+      return Response.json(
+        { success: false, message: "Model Year must be a valid date." },
+        { status: 400 }
+      );
+    }
+    if (!vehicletype || String(vehicletype).trim() === "") {
+      return Response.json({ success: false, message: "Vehicle Type is required." }, { status: 400 });
+    }
+    if (!driverno || String(driverno).trim() === "") {
+      return Response.json({ success: false, message: "Driver Number is required." }, { status: 400 });
+    }
+
+    const [driverRows] = await conn.query("SELECT driverno FROM driver WHERE driverno = ?", [String(driverno).trim()]);
+    if (!driverRows || driverRows.length === 0) {
+      return Response.json({ success: false, message: `Driver Number '${driverno}' does not exist.` }, { status: 400 });
+    }
+
+    const [existingChassis] = await conn.query("SELECT chassisno FROM vehicle WHERE chassisno = ?", [String(chassisno).trim()]);
+    if (existingChassis && existingChassis.length > 0) {
+      return Response.json({ success: false, message: `Chassis Number '${chassisno}' already exists.` }, { status: 400 });
+    }
+
+    const [existingEngine] = await conn.query("SELECT engineno FROM vehicle WHERE engineno = ?", [String(engineno).trim()]);
+    if (existingEngine && existingEngine.length > 0) {
+      return Response.json({ success: false, message: `Engine Number '${engineno}' already exists.` }, { status: 400 });
+    }
+
+    const [existingPlate] = await conn.query("SELECT plateno FROM vehicle WHERE plateno = ?", [String(plateno).trim()]);
+    if (existingPlate && existingPlate.length > 0) {
+      return Response.json({ success: false, message: `Plate Number '${plateno}' already exists.` }, { status: 400 });
+    }
+
     await conn.query(
       `INSERT INTO vehicle (chassisno, engineno, plateno, color, myear, vehicletype, model, make, driverno)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [chassisno, engineno, plateno, color, myear, vehicletype, model, make, driverno]
+      [
+        String(chassisno).trim(),
+        String(engineno).trim(),
+        String(plateno).trim(),
+        color ? String(color).trim() : null,
+        myear,
+        String(vehicletype).trim(),
+        model ? String(model).trim() : null,
+        make ? String(make).trim() : null,
+        String(driverno).trim()
+      ]
     );
 
     return Response.json({ success: true, message: "Vehicle added successfully." });
@@ -91,7 +142,6 @@ export async function PUT(request) {
 
   try {
     conn = await pool.getConnection();
-
     const body = await request.json();
 
     const {
@@ -106,10 +156,54 @@ export async function PUT(request) {
       driverno,
     } = body;
 
+    if (!engineno || String(engineno).trim() === "") {
+      return Response.json({ success: false, message: "Engine Number is required." }, { status: 400 });
+    }
+    if (!plateno || String(plateno).trim() === "") {
+      return Response.json({ success: false, message: "Plate Number is required." }, { status: 400 });
+    }
+    if (!myear || isNaN(Date.parse(myear))) {
+      return Response.json(
+        { success: false, message: "Model Year must be a valid date." },
+        { status: 400 }
+      );
+    }
+    if (!vehicletype || String(vehicletype).trim() === "") {
+      return Response.json({ success: false, message: "Vehicle Type is required." }, { status: 400 });
+    }
+    if (!driverno || String(driverno).trim() === "") {
+      return Response.json({ success: false, message: "Driver Number is required." }, { status: 400 });
+    }
+
+    const [driverRows] = await conn.query("SELECT driverno FROM driver WHERE driverno = ?", [String(driverno).trim()]);
+    if (!driverRows || driverRows.length === 0) {
+      return Response.json({ success: false, message: `Driver Number '${driverno}' does not exist.` }, { status: 400 });
+    }
+
+    const [existingEngine] = await conn.query("SELECT chassisno FROM vehicle WHERE engineno = ? AND chassisno != ?", [String(engineno).trim(), String(chassisno).trim()]);
+    if (existingEngine && existingEngine.length > 0) {
+      return Response.json({ success: false, message: `Engine Number '${engineno}' is already assigned to another vehicle.` }, { status: 400 });
+    }
+
+    const [existingPlate] = await conn.query("SELECT chassisno FROM vehicle WHERE plateno = ? AND chassisno != ?", [String(plateno).trim(), String(chassisno).trim()]);
+    if (existingPlate && existingPlate.length > 0) {
+      return Response.json({ success: false, message: `Plate Number '${plateno}' is already assigned to another vehicle.` }, { status: 400 });
+    }
+
     await conn.query(
       `UPDATE vehicle SET engineno=?, plateno=?, color=?, myear=?, vehicletype=?, model=?, make=?, driverno=?
        WHERE chassisno=?`,
-      [engineno, plateno, color, myear, vehicletype, model, make, driverno, chassisno]
+      [
+        String(engineno).trim(),
+        String(plateno).trim(),
+        color ? String(color).trim() : null,
+        myear,
+        String(vehicletype).trim(),
+        model ? String(model).trim() : null,
+        make ? String(make).trim() : null,
+        String(driverno).trim(),
+        String(chassisno).trim()
+      ]
     );
 
     return Response.json({ success: true, message: "Vehicle updated successfully." });
@@ -130,9 +224,12 @@ export async function DELETE(request) {
 
   try {
     conn = await pool.getConnection();
-
     const body = await request.json();
     const { chassisno } = body;
+
+    if (!chassisno) {
+      return Response.json({ success: false, message: "Chassis Number is required for deletion." }, { status: 400 });
+    }
 
     await conn.query(`DELETE FROM vehicle WHERE chassisno=?`, [chassisno]);
 
