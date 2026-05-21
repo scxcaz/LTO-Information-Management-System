@@ -157,7 +157,7 @@ export default function DriversPage() {
               <th className="border p-2">License Type</th>
               <th className="border p-2">Status</th>
               <th className="border p-2">Expiration</th>
-              <th className="border p-2">Actions</th>
+              <th className="border p-2 min-w-36">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -173,18 +173,20 @@ export default function DriversPage() {
                 <td className="border p-2">{driver.licstatus}</td>
                 <td className="border p-2">{formatDate(driver.licexpiration)}</td>
                 <td className="border p-2">
-                  <button
-                    onClick={() => openEditModal(driver)}
-                    className="mr-2 btn-primary-sm"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(driver.driverno)}
-                    className="btn-danger-sm"
-                  >
-                    Delete
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => openEditModal(driver)}
+                      className="btn-primary-sm"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(driver.driverno)}
+                      className="btn-danger-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
