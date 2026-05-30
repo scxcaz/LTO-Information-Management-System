@@ -6,21 +6,21 @@ This project is a simplified **Land Transportation Office (LTO) Information Mana
 
 It allows LTO personnel to:
 
-- View, add, edit, delete, and search driver records
-- View, add, edit, delete, and search vehicle records
-- View, add, edit, delete, and search vehicle registration records
-- View, add, edit, delete, and search traffic violation records
-- Generate required SQL-based reports from the MariaDB database
+* View, add, edit, delete, and search driver records
+* View, add, edit, delete, and search vehicle records
+* View, add, edit, delete, and search vehicle registration records
+* View, add, edit, delete, and search traffic violation records
+* Generate required SQL-based reports from the MariaDB database
 
 ---
 
 ## Tech Stack
 
-- **Frontend:** Next.js / React
-- **Backend:** Next.js API Routes
-- **Database:** MariaDB
-- **Language:** JavaScript
-- **Styling:** Tailwind CSS
+* **Frontend:** Next.js / React
+* **Backend:** Next.js API Routes
+* **Database:** MariaDB
+* **Language:** JavaScript
+* **Styling:** Tailwind CSS
 
 ---
 
@@ -28,29 +28,29 @@ It allows LTO personnel to:
 
 ```txt
 cmsc-127-st1-2l-casmamper-final-project/
-+-- database/
-�   +-- schema.sql                              # database schema and table definitions
-�   +-- seed.sql                                # sample seed data
-�   +-- reports.sql                             # standalone report query references
-�   +-- castillo_guarte_maminta_perez_PM3.sql   # archived combined SQL file
-+-- src/
-�   +-- app/
-�   �   +-- api/                                # API routes
-�   �   �   +-- drivers/
-�   �   �   +-- vehicles/
-�   �   �   +-- registrations/
-�   �   �   +-- violations/
-�   �   �   +-- reports/
-�   �   +-- drivers/                            # driver records page
-�   �   +-- vehicles/                           # vehicle records page
-�   �   +-- registrations/                      # vehicle registration records page
-�   �   +-- violations/                         # traffic violation records page
-�   �   +-- reports/                            # reports page
-�   +-- lib/
-�       +-- db.js                               # MariaDB connection pool
-+-- .env.example
-+-- README.md
-+-- package.json
+├── database/
+│   ├── schema.sql                              # database schema and table definitions
+│   ├── seed.sql                                # sample seed data
+│   ├── reports.sql                             # standalone report query references
+│   └── castillo_guarte_maminta_perez_PM3.sql   # archived combined SQL file
+├── src/
+│   ├── app/
+│   │   ├── api/                                # API routes
+│   │   │   ├── drivers/
+│   │   │   ├── vehicles/
+│   │   │   ├── registrations/
+│   │   │   ├── violations/
+│   │   │   └── reports/
+│   │   ├── drivers/                            # driver records page
+│   │   ├── vehicles/                           # vehicle records page
+│   │   ├── registrations/                      # vehicle registration records page
+│   │   ├── violations/                         # traffic violation records page
+│   │   └── reports/                            # reports page
+│   └── lib/
+│       └── db.js                               # MariaDB connection pool
+├── .env.example
+├── README.md
+└── package.json
 ```
 
 ---
@@ -59,37 +59,37 @@ cmsc-127-st1-2l-casmamper-final-project/
 
 ### Driver Management
 
-- View driver records
-- Add new drivers
-- Edit existing drivers
-- Delete drivers when allowed by database constraints
-- Search driver records
-- Validate required driver fields
+* View driver records
+* Add new drivers
+* Edit existing drivers
+* Delete drivers when allowed by database constraints
+* Search driver records
+* Validate required driver fields
 
 ### Vehicle Management
 
-- View vehicle records with owner details
-- Add new vehicles
-- Edit existing vehicles
-- Delete vehicles when allowed by database constraints
-- Search vehicle records
-- Validate required vehicle fields
+* View vehicle records with owner details
+* Add new vehicles
+* Edit existing vehicles
+* Delete vehicles when allowed by database constraints
+* Search vehicle records
+* Validate required vehicle fields
 
 ### Vehicle Registration Management
 
-- View vehicle registration records
-- Add new registration records
-- Edit existing registration records
-- Delete registration records
-- Search registration records
+* View vehicle registration records
+* Add new registration records
+* Edit existing registration records
+* Delete registration records
+* Search registration records
 
 ### Traffic Violation Management
 
-- View traffic violation records
-- Add new violation records
-- Edit existing violation records
-- Delete violation records
-- Search violation records
+* View traffic violation records
+* Add new violation records
+* Edit existing violation records
+* Delete violation records
+* Search violation records
 
 ### Reports
 
@@ -125,8 +125,8 @@ https://mariadb.org/download/
 
 During installation:
 
-- Set a root password
-- Use the default port: `3306`
+* Set a root password
+* Use the default port: `3306`
 
 Make sure MariaDB is running before starting the app.
 
@@ -261,16 +261,16 @@ Then test these pages:
 
 ## Important Notes
 
-- Do not commit `.env.local`
-- Each developer should use their own MariaDB password
-- `schema.sql` and `seed.sql` are the official setup files
-- `reports.sql` is for report query reference/testing
-- `castillo_guarte_maminta_perez_PM3.sql` is archived for reference only
+* Do not commit `.env.local`
+* Each developer should use their own MariaDB password
+* `schema.sql` and `seed.sql` are the official setup files
+* `reports.sql` is for report query reference/testing
+* `castillo_guarte_maminta_perez_PM3.sql` is archived for reference only
 
 ---
 
 ## Team Members
 
-- Castillo, Sean Carlo
-- Maminta, Lawrence Andrew
-- Perez, Desmond Rainier
+* Castillo, Sean Carlo
+* Maminta, Lawrence Andrew
+* Perez, Desmond Rainier
